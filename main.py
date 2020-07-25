@@ -13,6 +13,8 @@ import playsound
 import pytz
 import subprocess
 
+import webScraping
+
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 MONTHS = ["january", "february", "march", "april", "may", "june","july", "august", "september","october", "november", "december"] 
@@ -170,11 +172,11 @@ def get_date(text):
 def note(text):
 	date = datetime.datetime.now()
 	file_name = str(date).replace(":","-") + "-note.txt"
-	with open(file_name , "w") as f:
+	with open(file_name , "w" ,encoding="utf-8") as f:
 		f.write(text)
 	
-	path = "C:\Program Files\Sublime Text 3\sublime_text.exe"
-	subprocess.Popen([path, file_name])
+	
+	subprocess.Popen(["notepad.exe", file_name])
 
 # text = get_audio()
 # print(get_date(text))
@@ -206,3 +208,12 @@ for pharase in NOTE_STR:
 		note(write_down)
 		speak("l've made a note fo that")
 	
+
+WEBSCRAPING_STR = ["get the information of" , "search for a product"]
+
+for pharase in WEBSCRAPING_STR:
+	if pharase in text:
+		speak("what product are you looking for?")
+		product = get_audio()
+		scrap = webScraping.webscraping(product)
+		note(scrap)

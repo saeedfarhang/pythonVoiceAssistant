@@ -5,22 +5,29 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 
-PATH = "C:\Program Files (x86)\chromedriver.exe"
 
-driver = webdriver.Chrome(PATH)
+def webscraping(keyword):
+    PATH = "C:\Program Files (x86)\chromedriver.exe"
 
-driver.get("https://www.digikala.com/")
+    driver = webdriver.Chrome(PATH)
 
-search = driver.find_element_by_name("q")
-search.send_keys("webcam")
-search.send_keys(Keys.RETURN)
+    driver.get("https://www.digikala.com/")
 
-try:
-    main = WebDriverWait(driver, 10).until(
-    EC.presence_of_element_located((By.ID, "main"))
-    )
-    titles = main.find_elements_by_css_selector("a.js-product-url")
-    for title in titles:
-        print(title.text)
-except:
-    driver.quit()
+    search = driver.find_element_by_name("q")
+    search.send_keys(keyword)
+    search.send_keys(Keys.RETURN)
+
+    products = ""
+
+    try:
+        main = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.ID, "main"))
+        )
+        titles = main.find_elements_by_css_selector("a.js-product-url")
+        for title in titles:
+            product = title.text
+            products += product + "\n"
+
+        return products
+    except:
+        driver.quit()
